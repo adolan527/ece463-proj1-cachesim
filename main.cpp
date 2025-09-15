@@ -5,7 +5,7 @@
 
 // Use this for submission
 #define CLI_MODE true
-#define DEBUG_MODE true
+#define DEBUG_MODE false
 
 constexpr int argCount = 9;
 struct CLI_Args{
