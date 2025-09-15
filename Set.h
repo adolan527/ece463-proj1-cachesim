@@ -20,6 +20,10 @@ namespace CacheSim {
                     valid(false), dirty(false), counter(0), tag(0){
             };
 
+            void PrintContents(FILE *file) const{
+                fprintf(file,"%x %c\t",tag,dirty ? 'D' : ' ');
+            }
+
         };
 
         std::vector<Block> m_blocks;
@@ -31,6 +35,8 @@ namespace CacheSim {
         Set(uint32_t ways, uint32_t blocksize);
 
         SetResponse SendRequest(SetRequest req);
+
+        void PrintContents(FILE* file);
 
 
     private:

@@ -49,6 +49,10 @@ namespace CacheSim {
 
         std::string& GetName();
 
+        CacheType GetType();
+
+        void PrintContents(FILE *file);
+
     private:
         SetRequest CacheToSetRequest(const CacheRequest &req) const;
 

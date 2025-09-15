@@ -33,6 +33,8 @@ namespace CacheSim {
 
         void PrintResults(FILE *file=stdout);
 
+        void PrintContents(FILE *file=stdout);
+
         void Statistics();
 
     };

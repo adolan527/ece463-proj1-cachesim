@@ -75,6 +75,14 @@ namespace CacheSim {
 
     }
 
+    void Manager::PrintContents(FILE *file) {
+        for(auto &c : m_layers){
+            if(c->GetType()!=CacheType::Memory){
+                c->PrintContents(file);
+            }
+        }
+    }
+
     void Manager::ReadTrace(FILE *file, uint32_t lines){
         uint32_t lineCount = 0;
         while(!feof(file) && lineCount < lines){

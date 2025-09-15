@@ -112,4 +112,17 @@ namespace CacheSim {
         m_results = nullptr;
     }
 
+    CacheType Cache::GetType() {
+        return m_type;
+    }
+
+    void Cache::PrintContents(FILE *file) {
+        fprintf(file,"===== %s contents =====\n",m_name.c_str());
+        size_t index = 0;
+        for(auto &s : m_sets){
+            fprintf(file,"set\t%llu:\t",index++);
+            s.PrintContents(file);
+            fprintf(file,"\n");
+        }
+    }
 }

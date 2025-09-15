@@ -47,6 +47,12 @@ namespace CacheSim {
         return resp;
     }
 
+    void Set::PrintContents(FILE* file){
+        for(auto &b : m_blocks){
+            b.PrintContents(file);
+        }
+    }
+
 
     void Set::IncLessThan(uint32_t threshold) {
         for(auto &b : m_blocks){
