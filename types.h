@@ -120,6 +120,7 @@ namespace CacheSim {
         double readMissRate() const{
             return read == 0 ? 0 : ((double)read_miss)/(read);
         }
+
     };
 
 

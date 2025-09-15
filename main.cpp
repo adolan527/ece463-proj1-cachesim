@@ -5,7 +5,7 @@
 
 // Use this for submission
 #define CLI_MODE true
-#define DEBUG_MODE false
+#define DEBUG_MODE true
 
 constexpr int argCount = 9;
 struct CLI_Args{
@@ -74,9 +74,11 @@ int main(int argc, char **argv) {
     printf("L2_SIZE:\t%d\n",args.L2_SIZE);
     printf("L2_ASSOC:\t%d\n",args.L2_ASSOC);
     printf("PREF_N:\t0\n");
+    printf("PREF_M:\t0\n");
     printf("trace_file:\t%s\n",args.trace_file);
     printf("\n");
     man.PrintContents();
+    man.PrintStatistics();
 
     //man.Statistics();
     return 0;
