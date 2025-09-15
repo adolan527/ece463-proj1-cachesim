@@ -42,6 +42,8 @@ namespace CacheSim {
     private:
         void IncLessThan(uint32_t threshold); // Used internally for updating LRU counters
 
+        void SortBlocks();
+
     };
 
 

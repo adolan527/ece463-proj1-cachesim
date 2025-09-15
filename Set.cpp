@@ -3,6 +3,7 @@
 //
 
 #include "Set.h"
+#include <algorithm>
 
 namespace CacheSim {
 
@@ -48,11 +49,17 @@ namespace CacheSim {
     }
 
     void Set::PrintContents(FILE* file){
+        SortBlocks();
         for(auto &b : m_blocks){
             b.PrintContents(file);
         }
+
     }
 
+
+    void Set::SortBlocks(){
+        std::sort(m_blocks.begin(), m_blocks.end(),[](const Block &a,const Block &b){return a.counter < b.counter;});
+    }
 
     void Set::IncLessThan(uint32_t threshold) {
         for(auto &b : m_blocks){
