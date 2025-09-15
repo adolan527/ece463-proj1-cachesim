@@ -28,7 +28,6 @@ printf("%x\n%x\n",x,x>>16);
         perror("Usage: sim BLOCKSIZE L1_SIZE L1_ASSOC L2_SIZE L2_ASSOC PREF_N PREF_M trace_file");
         return 1;
     }
-    /*
     args.BLOCKSIZE = atoll(argv[1]);
     args.L1_SIZE = atoll(argv[2]);
     args.L1_ASSOC = atoll(argv[3]);
@@ -37,8 +36,9 @@ printf("%x\n%x\n",x,x>>16);
     args.PREF_N = atoll(argv[6]);
     args.PREF_M = atoll(argv[7]);
     args.trace_file = argv[8];
-*/
 
+/*
+ * Override for testing
     args.BLOCKSIZE = 16;
     args.L1_SIZE = 1024;
     args.L1_ASSOC = 1;
@@ -48,7 +48,7 @@ printf("%x\n%x\n",x,x>>16);
     args.PREF_M = 0;
     char* trace = "../example_trace.txt";
     args.trace_file = trace;
-
+*/
     auto man = CacheSim::Manager();
 
     man.AppendLayer("L1",args.L1_SIZE,args.L1_ASSOC,args.BLOCKSIZE);
