@@ -65,23 +65,23 @@ namespace CacheSim {
         }
 
         fprintf(file,"===== Measurements =====\n");
-        fprintf(file,"-a. L1 reads:                   %u\n",l1s.read);
-        fprintf(file,"-b. L1 read misses:             %u\n",l1s.read_miss);
-        fprintf(file,"-c. L1 writes:                  %u\n",l1s.write);
-        fprintf(file,"-d. L1 write misses:            %u\n",l1s.write_miss);
-        fprintf(file,"-e. L1 miss rate:               %f\n",l1s.missRate());
-        fprintf(file,"-f. L1 writebacks:              %u\n",l1s.writeback);
-        fprintf(file,"-g. L1 prefetches:              %u\n",0);
-        fprintf(file,"-h. L2 reads (demand):          %u\n",l2s.read);
-        fprintf(file,"-i. L2 read misses (demand):    %u\n",l2s.read_miss);
-        fprintf(file,"-j. L2 reads (prefetch):        %u\n",0);
-        fprintf(file,"-k. L2 read misses (prefetch):  %u\n",0);
-        fprintf(file,"-l. L2 writes:                  %u\n",l2s.write);
-        fprintf(file,"-m. L2 write misses:            %u\n",l2s.write_miss);
-        fprintf(file,"-n. L2 miss rate:               %f\n",l2s.missRate());
-        fprintf(file,"-o. L2 writebacks:              %u\n",l2s.writeback);
-        fprintf(file,"-p. L2 prefetches:              %u\n",0);
-        fprintf(file,"-q. memory traffic:             %u\n",mems.write+mems.read);
+        fprintf(file,"a. L1 reads:                   %u\n",l1s.read);
+        fprintf(file,"b. L1 read misses:             %u\n",l1s.read_miss);
+        fprintf(file,"c. L1 writes:                  %u\n",l1s.write);
+        fprintf(file,"d. L1 write misses:            %u\n",l1s.write_miss);
+        fprintf(file,"e. L1 miss rate:               %.4f\n",l1s.missRate());
+        fprintf(file,"f. L1 writebacks:              %u\n",l1s.writeback);
+        fprintf(file,"g. L1 prefetches:              %u\n",0);
+        fprintf(file,"h. L2 reads (demand):          %u\n",l2s.read);
+        fprintf(file,"i. L2 read misses (demand):    %u\n",l2s.read_miss);
+        fprintf(file,"j. L2 reads (prefetch):        %u\n",0);
+        fprintf(file,"k. L2 read misses (prefetch):  %u\n",0);
+        fprintf(file,"l. L2 writes:                  %u\n",l2s.write);
+        fprintf(file,"m. L2 write misses:            %u\n",l2s.write_miss);
+        fprintf(file,"n. L2 miss rate:               %.4f\n",l2s.missRate());
+        fprintf(file,"o. L2 writebacks:              %u\n",l2s.writeback);
+        fprintf(file,"p. L2 prefetches:              %u\n",0);
+        fprintf(file,"q. memory traffic:             %u\n",mems.write+mems.read);
 
     }
 

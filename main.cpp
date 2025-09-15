@@ -3,9 +3,7 @@
 #include "Manager.h"
 #include <random>
 
-// Use this for submission
-#define CLI_MODE true
-#define DEBUG_MODE false
+
 
 constexpr int argCount = 9;
 struct CLI_Args{
@@ -17,17 +15,22 @@ struct CLI_Args{
 
 int main(int argc, char **argv) {
 
-#if CLI_MODE
 
+    bool debug_mode = false;
     CLI_Args args;
-    argc = argCount;
+
     if(argc!=argCount){
-        perror("Usage: sim BLOCKSIZE L1_SIZE L1_ASSOC L2_SIZE L2_ASSOC PREF_N PREF_M trace_file");
-        return 1;
+        if(argc==2 && argv[1][0]=='d'){
+            debug_mode = true;
+            printf("Running in debug mode\n");
+        } else{
+            printf("Usage: sim BLOCKSIZE L1_SIZE L1_ASSOC L2_SIZE L2_ASSOC PREF_N PREF_M trace_file");
+            return 1;
+        }
     }
     auto man = CacheSim::Manager();
 
-#if !DEBUG_MODE
+if(!debug_mode) {
     args.BLOCKSIZE = atoll(argv[1]);
     args.L1_SIZE = atoll(argv[2]);
     args.L1_ASSOC = atoll(argv[3]);
@@ -36,9 +39,7 @@ int main(int argc, char **argv) {
     args.PREF_N = atoll(argv[6]);
     args.PREF_M = atoll(argv[7]);
     args.trace_file = argv[8];
-#endif
-
-#if DEBUG_MODE
+} else {
     args.BLOCKSIZE = 16;
     args.L1_SIZE = 1024;
     args.L1_ASSOC = 1;
@@ -46,9 +47,9 @@ int main(int argc, char **argv) {
     args.L2_ASSOC = 4;
     args.PREF_N = 0;
     args.PREF_M = 0;
-    char* trace = "../example_trace.txt";
+    char *trace = "../example_trace.txt";
     args.trace_file = trace;
-#endif
+}
 
     man.AppendLayer("L1",args.L1_SIZE,args.L1_ASSOC,args.BLOCKSIZE);
 
@@ -73,8 +74,8 @@ int main(int argc, char **argv) {
     printf("L1_ASSOC:\t%d\n",args.L1_ASSOC);
     printf("L2_SIZE:\t%d\n",args.L2_SIZE);
     printf("L2_ASSOC:\t%d\n",args.L2_ASSOC);
-    printf("PREF_N:\t0\n");
-    printf("PREF_M:\t0\n");
+    printf("PREF_N:\t%d\n",args.PREF_N);
+    printf("PREF_M:\t%d\n",args.PREF_M);
     printf("trace_file:\t%s\n",args.trace_file);
     printf("\n");
     man.PrintContents();
@@ -82,39 +83,8 @@ int main(int argc, char **argv) {
 
     //man.Statistics();
     return 0;
-#endif
-
-#if !CLI_MODE
-
-    auto man = CacheSim::Manager();
-
-    man.AppendLayer("L1",2048,4,8);
-    man.AppendLayer("L2",8192,16,8);
-    man.AppendLayer("Memory",CacheSim::CacheType::Memory);
-
-    man.StartDebugLayers();
-
-    auto file = fopen("../example_trace.txt","r");
-    if(!file){
-        perror("Failed to open '../example_trace.txt'\n");
-        return 1;
-    }
-    man.ReadTrace(file);
-    fclose(file);
 
 
-    //man.StopDebugLayers();
-    file = fopen("../output.csv","w");
-    if(!file){
-        perror("Failed to open '../output.csv'\n");
-        return 1;
-    }
-    man.PrintResults(file);
-    man.Statistics();
-
-    fclose(file);
-    return 0;
-#endif
 }
 
 // 3 C's of misses
