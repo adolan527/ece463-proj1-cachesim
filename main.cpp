@@ -16,10 +16,6 @@ struct CLI_Args{
 
 int main(int argc, char **argv) {
 
-uint32_t x = 0xFFFF0000;
-printf("%x\n%x\n",x,x>>16);
-
-
 #if CLI_MODE
 
     CLI_Args args;
