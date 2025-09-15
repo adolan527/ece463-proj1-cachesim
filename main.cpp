@@ -25,6 +25,8 @@ int main(int argc, char **argv) {
         perror("Usage: sim BLOCKSIZE L1_SIZE L1_ASSOC L2_SIZE L2_ASSOC PREF_N PREF_M trace_file");
         return 1;
     }
+    auto man = CacheSim::Manager();
+
 #if !DEBUG_MODE
     args.BLOCKSIZE = atoll(argv[1]);
     args.L1_SIZE = atoll(argv[2]);
@@ -35,7 +37,8 @@ int main(int argc, char **argv) {
     args.PREF_M = atoll(argv[7]);
     args.trace_file = argv[8];
 #endif
-#else {
+
+#if DEBUG_MODE
     args.BLOCKSIZE = 16;
     args.L1_SIZE = 1024;
     args.L1_ASSOC = 1;
@@ -45,9 +48,7 @@ int main(int argc, char **argv) {
     args.PREF_M = 0;
     char* trace = "../example_trace.txt";
     args.trace_file = trace;
-}
-
-    auto man = CacheSim::Manager();
+#endif
 
     man.AppendLayer("L1",args.L1_SIZE,args.L1_ASSOC,args.BLOCKSIZE);
 
@@ -77,7 +78,7 @@ int main(int argc, char **argv) {
     printf("\n");
     man.PrintContents();
 
-    man.Statistics();
+    //man.Statistics();
     return 0;
 #endif
 
