@@ -68,7 +68,7 @@ if(!debug_mode) {
     fclose(file);
 
 
-    printf("\n");
+    //printf("\n");
     printf("===== Simulator configuration =====\n");
     printf("BLOCKSIZE:\t%d\n",args.BLOCKSIZE);
     printf("L1_SIZE:\t%d\n",args.L1_SIZE);
@@ -80,6 +80,7 @@ if(!debug_mode) {
     printf("trace_file:\t%s\n",args.trace_file);
     printf("\n");
     man.PrintContents();
+    printf("\n");
     man.PrintStatistics();
 
     //man.Statistics();
