@@ -68,13 +68,10 @@ namespace CacheSim {
 
 
 
-        if(res.hit || req.type != RequestType::Read) { // if we hit, return
+        if(res.hit ) { // if we hit, return
             return res;
         } else{ //if we missed
             if(res.dirty) { // Dirty write, then normal read or nothing if write
-                if(m_name=="L2" && req.type != RequestType::Read){
-                    int x = 0;
-                }
                 m_stats.writeback++;
                 auto dirty_req = req;
                 dirty_req.type = RequestType::DirtyWrite;
