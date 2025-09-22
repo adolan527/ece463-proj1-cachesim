@@ -68,6 +68,7 @@ if(!debug_mode) {
     fclose(file);
 
 
+    printf("\n");
     printf("===== Simulator configuration =====\n");
     printf("BLOCKSIZE:\t%d\n",args.BLOCKSIZE);
     printf("L1_SIZE:\t%d\n",args.L1_SIZE);
