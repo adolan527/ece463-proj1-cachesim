@@ -13,9 +13,10 @@ namespace CacheSim {
     protected:
 
         struct Block{
-            uint32_t counter, tag; // a better datatype may exist, this is safe
-            bool valid;
-            bool dirty;
+            bool valid = false;
+            bool dirty = false;
+            uint32_t counter = 0, tag = 0; // a better datatype may exist, this is safe
+
             Block():
                     valid(false), dirty(false), counter(0), tag(0){
             };

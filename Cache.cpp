@@ -20,6 +20,10 @@ namespace CacheSim {
 
 
     CacheResponse Cache::SendRequest(const CacheSim::CacheRequest &req) {
+        if(m_type==CacheType::Memory && req.type == RequestType::DirtyWrite){
+            int x = 0; //breakpoint
+        }
+
 
         if(m_type==CacheType::Memory){
             switch(req.type){
@@ -39,10 +43,6 @@ namespace CacheSim {
                         (req.type),
                         m_name);
             return {true};
-        }
-
-        if(m_name=="L2" && req.type != RequestType::Read){
-            int x = 0;
         }
 
 
@@ -77,7 +77,8 @@ namespace CacheSim {
                 dirty_req.type = RequestType::DirtyWrite;
                 m_nextLayer->SendRequest(dirty_req);
             }
-            return m_nextLayer->SendRequest(req);//try next cache
+            if (req.type == RequestType::Read) return m_nextLayer->SendRequest(req);//try next cache
+            else return res;
         }
 
     }
@@ -93,8 +94,10 @@ namespace CacheSim {
     SetRequest Cache::CacheToSetRequest(const CacheSim::CacheRequest &req) const {
         SetRequest retval{};
         retval.type = req.type;
-        retval.tag = req.address >> (m_bitWidths.index + m_bitWidths.blockOffset); // overwrite tag and offset
-        retval.index = (req.address & (ADDRESS_MAX >> m_bitWidths.tag)) >> m_bitWidths.blockOffset; // zero tag, then shift tag right
+        retval.tag = req.address >> (m_bitWidths.index + m_bitWidths.blockOffset); // overwrite index and offset
+        auto mask =ADDRESS_MAX >> m_bitWidths.tag;
+        auto intermediate = (req.address & (mask));
+        retval.index = intermediate>> m_bitWidths.blockOffset; // zero tag, then shift tag right
         return retval;
     }
     void Cache::SetNextLayer(Cache* next){

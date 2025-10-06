@@ -10,7 +10,7 @@ namespace CacheSim {
     Set::Set(uint32_t ways, uint32_t blocksize) :
     m_blocksize(blocksize) {
         m_blocks.resize(ways);
-        for(int i = 0; i < ways; i++){
+        for(uint32_t i = 0; i < ways; i++){
             m_blocks[i].counter = i;
         } // set counters to 0-MAX
     }
@@ -19,18 +19,20 @@ namespace CacheSim {
         SetResponse resp = {false,false,0};
         int index = 0;
 
-        for(int i = 0; i <m_blocks.size() ;i++){ // check for tag matches
+        for(size_t i = 0; i <m_blocks.size() ;i++){ // check for tag matches
             if(m_blocks[i].valid && m_blocks[i].tag == req.tag){ // if the tag matches
                 resp.hit = true; // hit
                 index = i; // target block
-                goto done;
+                goto done; // no more iteration is necessary
             }
+
             index = m_blocks[i].counter > m_blocks[index].counter // else target block is LRU
                     ? m_blocks[i].counter
                     : m_blocks[index].counter;
         }
 
 
+        // cleanup required regardless of previous execution
         done:
         if(!resp.hit) { //miss, eviction
             if(m_blocks[index].valid && m_blocks[index].dirty) { //we are evicting a dirty block
@@ -42,7 +44,7 @@ namespace CacheSim {
         IncLessThan(m_blocks[index].counter);
         m_blocks[index].counter = 0;
         m_blocks[index].tag = req.tag;
-        m_blocks[index].valid = 1;
+        m_blocks[index].valid = true;
         m_blocks[index].dirty = m_blocks[index].dirty ? m_blocks[index].dirty : req.type == RequestType::Write || req.type == RequestType::DirtyWrite;
 
         return resp;

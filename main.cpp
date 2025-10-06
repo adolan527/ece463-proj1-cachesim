@@ -64,6 +64,8 @@ if(!debug_mode) {
         printf("Error: could not open file %s\n",args.trace_file);
         return 1;
     }
+    man.StartDebugLayers();
+
     man.ReadTrace(file);
     fclose(file);
 
@@ -83,6 +85,9 @@ if(!debug_mode) {
     printf("\n");
     man.PrintStatistics();
 
+    file = fopen("output.csv","w");
+    man.PrintResults(file);
+    fclose(file);
     //man.Statistics();
     return 0;
 
