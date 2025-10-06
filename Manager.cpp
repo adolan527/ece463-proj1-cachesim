@@ -43,16 +43,19 @@ namespace CacheSim {
 
         fprintf(file,"Name,Type,Address,Tag,Index,Hit,Dirty_evicted,Dirty_address\n");
         for(size_t i = 0; i < m_results.size();i++){
-            fprintf(file,"%s,%s," ADDRESS_FORM_SPEC ",%x,%x,%s,%s,%x\n",
-                    m_results[i].name.c_str(),
-                    m_results[i].cacreq.type == RequestType::Write ? "Write" : m_results[i].cacreq.type == RequestType::DirtyWrite ? "DirtyWrite" : "Read",
-                    m_results[i].cacreq.address,
-                    m_results[i].setreq.tag,
-                    m_results[i].setreq.index,
-                    m_results[i].setresp.hit ? "Hit" : "Miss",
-                    m_results[i].setresp.dirty ? "Dirty Evict" : "None",
-                    m_results[i].setresp.dirty_tag
-            );
+            if (m_results[i].setreq.index == 0 && m_results[i].name[0] != 'M')
+                fprintf(file,"%s,%s," ADDRESS_FORM_SPEC ",%x,%x,%s,%s,%x\n",
+        m_results[i].name.c_str(),
+        m_results[i].cacreq.type == RequestType::Write ? "Write" : m_results[i].cacreq.type == RequestType::DirtyWrite ? "DirtyWrite" : "Read",
+        m_results[i].cacreq.address,
+        m_results[i].setreq.tag,
+        m_results[i].setreq.index,
+        m_results[i].setresp.hit ? "Hit" : "Miss",
+        m_results[i].setresp.dirty ? "Dirty Evict" : "None",
+        m_results[i].setresp.dirty_tag
+);
+
+
         }
     }
 

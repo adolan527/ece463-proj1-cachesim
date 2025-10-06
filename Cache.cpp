@@ -67,19 +67,23 @@ namespace CacheSim {
         }
 
 
-
-        if(res.hit ) { // if we hit, return
+        if(res.hit) { // if we hit, return
             return res;
-        } else{ //if we missed
-            if(res.dirty) { // Dirty write, then normal read or nothing if write
-                m_stats.writeback++;
-                auto dirty_req = req;
-                dirty_req.type = RequestType::DirtyWrite;
-                m_nextLayer->SendRequest(dirty_req);
-            }
-            if (req.type == RequestType::Read) return m_nextLayer->SendRequest(req);//try next cache
-            else return res;
         }
+
+        //miss
+        if(res.dirty) { // Dirty write, then normal read or nothing if write
+            m_stats.writeback++;
+            auto dirty_req = req;
+            dirty_req.type = RequestType::DirtyWrite;
+            return m_nextLayer->SendRequest(dirty_req);
+        }
+
+        // clean read miss
+        if (req.type == RequestType::Read) return m_nextLayer->SendRequest(req);//try next cache
+
+        // clean write miss
+        return res;
 
     }
 

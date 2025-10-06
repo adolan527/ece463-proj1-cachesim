@@ -27,14 +27,20 @@ namespace CacheSim {
             }
 
             index = m_blocks[i].counter > m_blocks[index].counter // else target block is LRU
-                    ? m_blocks[i].counter
-                    : m_blocks[index].counter;
+                    ? i
+                    : index;
         }
 
 
         // cleanup required regardless of previous execution
         done:
         if(!resp.hit) { //miss, eviction
+            bool hasempty = false;
+            for (int i = 0 ; i< m_blocks.size(); i++) {
+                if (!m_blocks[i].valid && i != index && m_blocks[index].valid) {
+                    printf("Evicting valid when invalid exists\n");
+                }
+            }
             if(m_blocks[index].valid && m_blocks[index].dirty) { //we are evicting a dirty block
                 resp.dirty = true;
                 resp.dirty_tag = m_blocks[index].tag;
