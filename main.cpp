@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
 
 
     bool debug_mode = false;
+    bool do_csv = false;
     CLI_Args args;
 
     if(argc!=argCount){
@@ -64,7 +65,7 @@ if(!debug_mode) {
         printf("Error: could not open file %s\n",args.trace_file);
         return 1;
     }
-    man.StartDebugLayers();
+    if (do_csv) man.StartDebugLayers();
 
     man.ReadTrace(file);
     fclose(file);
@@ -85,9 +86,12 @@ if(!debug_mode) {
     printf("\n");
     man.PrintStatistics();
 
-    file = fopen("output.csv","w");
-    man.PrintResults(file);
-    fclose(file);
+    if (do_csv) {
+        file = fopen("output.csv","w");
+        man.PrintResults(file);
+        fclose(file);
+    }
+
     //man.Statistics();
     return 0;
 
