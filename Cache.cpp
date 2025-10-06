@@ -80,7 +80,7 @@ namespace CacheSim {
         }
 
         // clean read miss
-        if (req.type == RequestType::Read) return m_nextLayer->SendRequest(req);//try next cache
+        return m_nextLayer->SendRequest(req);//try next cache
 
         // clean write miss
         return res;
