@@ -66,6 +66,9 @@ namespace CacheSim {
             else if(c->GetName() == "L2") l2s = c->GetStats();
             else if(c->GetName() == "Memory") mems = c->GetStats();
         }
+        auto mem_traffic = l2s.read == 0 // no l2
+                            ? l1s.read_miss + l1s.write_miss + l1s.writeback // l1 to mem
+                            : l2s.read_miss + l2s.write_miss + l2s.writeback; // l2 to mem
 
         fprintf(file,"===== Measurements =====\n");
         fprintf(file,"a. L1 reads:                   %u\n",l1s.read);
@@ -84,7 +87,7 @@ namespace CacheSim {
         fprintf(file,"n. L2 miss rate:               %.4f\n",l2s.missRate());
         fprintf(file,"o. L2 writebacks:              %u\n",l2s.writeback);
         fprintf(file,"p. L2 prefetches:              %u\n",0);
-        fprintf(file,"q. memory traffic:             %u\n",mems.write+mems.read);
+        fprintf(file,"q. memory traffic:             %u\n",mem_traffic);
 
     }
 

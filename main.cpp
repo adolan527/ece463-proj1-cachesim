@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 
 
     bool debug_mode = false;
-    bool do_csv = false;
+    bool do_csv = true;
     CLI_Args args;
 
     if(argc!=argCount){
