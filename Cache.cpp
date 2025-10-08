@@ -20,9 +20,6 @@ namespace CacheSim {
 
 
     CacheResponse Cache::SendRequest(const CacheSim::CacheRequest &req) {
-        if(m_type==CacheType::Memory && req.type == RequestType::DirtyWrite){
-            int x = 0; //breakpoint
-        }
 
 
         if(m_type==CacheType::Memory){
@@ -47,6 +44,9 @@ namespace CacheSim {
 
 
         auto sr = CacheToSetRequest(req);
+        if ((sr.tag == 0x8006b && sr.index == 14) || g_debug_id == 115137) {
+            printf("here\n");
+        }
         auto res = m_sets[sr.index].SendRequest(sr);
 
         // Log result
@@ -75,6 +75,7 @@ namespace CacheSim {
         if(res.dirty) { // Dirty write, then normal read or nothing if write
             m_stats.writeback++;
             auto dirty_req = req;
+            dirty_req.address = res.dirty_address;
             dirty_req.type = RequestType::DirtyWrite;
             return m_nextLayer->SendRequest(dirty_req);
         }
@@ -98,6 +99,7 @@ namespace CacheSim {
     SetRequest Cache::CacheToSetRequest(const CacheSim::CacheRequest &req) const {
         SetRequest retval{};
         retval.type = req.type;
+        retval.address = req.address;
         retval.tag = req.address >> (m_bitWidths.index + m_bitWidths.blockOffset); // overwrite index and offset
         auto mask =ADDRESS_MAX >> m_bitWidths.tag;
         auto intermediate = (req.address & (mask));

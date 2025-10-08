@@ -43,16 +43,16 @@ namespace CacheSim {
             }
             if(m_blocks[index].valid && m_blocks[index].dirty) { //we are evicting a dirty block
                 resp.dirty = true;
-                resp.dirty_tag = m_blocks[index].tag;
+                resp.dirty_address = m_blocks[index].address;
                 m_blocks[index].dirty = false;
             }
         }
         IncLessThan(m_blocks[index].counter);
         m_blocks[index].counter = 0;
+        m_blocks[index].address = req.address;
         m_blocks[index].tag = req.tag;
         m_blocks[index].valid = true;
         m_blocks[index].dirty = m_blocks[index].dirty ? m_blocks[index].dirty : req.type == RequestType::Write || req.type == RequestType::DirtyWrite;
-
         return resp;
     }
 

@@ -4,7 +4,6 @@
 #include <random>
 
 
-
 constexpr int argCount = 9;
 struct CLI_Args{
     uint32_t BLOCKSIZE, L1_SIZE, L1_ASSOC, L2_SIZE, L2_ASSOC, PREF_N, PREF_M;
@@ -88,6 +87,7 @@ if(!debug_mode) {
 
     if (do_csv) {
         file = fopen("output.csv","w");
+        if (!file) return 0;
         man.PrintResults(file);
         fclose(file);
     }

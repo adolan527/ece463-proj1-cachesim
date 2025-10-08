@@ -41,10 +41,11 @@ namespace CacheSim {
 
     void Manager::PrintResults(FILE *file){
 
-        fprintf(file,"Name,Type,Address,Tag,Index,Hit,Dirty_evicted,Dirty_address\n");
+        fprintf(file,"ID, Name,Type,Address,Tag,Index,Hit,Dirty_evicted,Dirty_address\n");
         for(size_t i = 0; i < m_results.size();i++){
-            if (m_results[i].setreq.index == 0 && m_results[i].name[0] != 'M')
-                fprintf(file,"%s,%s," ADDRESS_FORM_SPEC ",%x,%x,%s,%s,%x\n",
+            //if (m_results[i].setreq.index == 0 && m_results[i].name[0] != 'M')
+                fprintf(file,"%u,%s,%s," ADDRESS_FORM_SPEC ",%x,%x,%s,%s,%x\n",
+                    m_results[i].uuid,
         m_results[i].name.c_str(),
         m_results[i].cacreq.type == RequestType::Write ? "Write" : m_results[i].cacreq.type == RequestType::DirtyWrite ? "DirtyWrite" : "Read",
         m_results[i].cacreq.address,
@@ -52,7 +53,7 @@ namespace CacheSim {
         m_results[i].setreq.index,
         m_results[i].setresp.hit ? "Hit" : "Miss",
         m_results[i].setresp.dirty ? "Dirty Evict" : "None",
-        m_results[i].setresp.dirty_tag
+        m_results[i].setresp.dirty_address
 );
 
 
@@ -102,15 +103,11 @@ namespace CacheSim {
     void Manager::ReadTrace(FILE *file, uint32_t lines){
         uint32_t lineCount = 0;
         while(!feof(file) && lineCount < lines){
-            if(lineCount == 8){// consecutive accesses to same index
-                int x = 0; //breakpoint
-            }
+
             char mode;
             uint32_t hex;
             fscanf(file,"%c %x\n",&mode,&hex);
-            if (hex==0x7b034dd4) {
-                int x = 0; //breakpoint
-            }
+
             CacheRequest req;
             if(mode == 'r') req.type = RequestType::Read;
             else if(mode == 'w') req.type = RequestType::Write;

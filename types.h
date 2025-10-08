@@ -40,9 +40,9 @@ namespace CacheSim {
     struct SetResponse{
         bool hit; // true == hit, false == miss
         bool dirty;
-        Address dirty_tag;
-        SetResponse() : hit(false), dirty(false), dirty_tag(0){};
-        SetResponse(bool h, bool d, Address t) : hit(h), dirty(d), dirty_tag(t) {};
+        Address dirty_address;
+        SetResponse() : hit(false), dirty(false), dirty_address(0){};
+        SetResponse(bool h, bool d, Address t) : hit(h), dirty(d), dirty_address(t) {};
     };
 
     struct CacheResponse {
@@ -80,13 +80,14 @@ namespace CacheSim {
 
     struct SetRequest{
         RequestType type;
+        Address address;
         uint32_t tag, index; // block offset not needed
 
-        SetRequest(RequestType rt, uint32_t t = 0, uint32_t i = 0) : type(rt), tag(t), index(i){}
+        SetRequest(RequestType rt, Address a = 0, uint32_t t = 0, uint32_t i = 0) : type(rt), address(a), tag(t), index(i){}
         SetRequest(){}
 
         void print(FILE *file = stdout) const{
-            fprintf(file,"%s\t%x\t%x\n",REQ_TO_STR((*this)),tag,index);
+            fprintf(file,"%s\t" ADDRESS_FORM_SPEC "\t%x\t%x\n",REQ_TO_STR((*this)),address,tag,index);
         }
     };
 
@@ -94,7 +95,9 @@ namespace CacheSim {
         uint8_t tag, index, blockOffset;
     };
 
+    extern uint64_t g_debug_id;
     struct DebugInfo{
+        uint64_t uuid;
         CacheResponse cacresp;
         CacheRequest cacreq;
         SetResponse setresp;
@@ -102,7 +105,9 @@ namespace CacheSim {
         std::string name;
 
         DebugInfo(CacheResponse cacheResponse, CacheRequest cacheRequest, SetResponse setResponse, SetRequest setRequest, std::string &newName) :
-                cacresp(cacheResponse), cacreq(cacheRequest), setresp(setResponse), setreq(setRequest), name(newName){};
+                cacresp(cacheResponse), cacreq(cacheRequest), setresp(setResponse), setreq(setRequest), name(newName) {
+            uuid = g_debug_id++;
+        };
 
     };
 

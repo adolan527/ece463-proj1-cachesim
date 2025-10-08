@@ -15,10 +15,11 @@ namespace CacheSim {
         struct Block{
             bool valid = false;
             bool dirty = false;
+            Address address = 0;
             uint32_t counter = 0, tag = 0; // a better datatype may exist, this is safe
 
             Block():
-                    valid(false), dirty(false), counter(0), tag(0){
+                    valid(false), dirty(false), address(0), counter(0), tag(0){
             };
 
             void PrintContents(FILE *file) const{
