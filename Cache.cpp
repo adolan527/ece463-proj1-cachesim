@@ -45,7 +45,7 @@ namespace CacheSim {
 
         auto sr = CacheToSetRequest(req);
         if ((sr.tag == 0x8006b && sr.index == 14) || g_debug_id == 115137) {
-            printf("here\n");
+            int x = 0;
         }
         auto res = m_sets[sr.index].SendRequest(sr);
 
