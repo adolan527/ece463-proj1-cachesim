@@ -76,17 +76,11 @@ namespace CacheSim {
             dirty_req.address = res.dirty_address;
             dirty_req.type = RequestType::DirtyWrite;
             auto dirty_res = m_nextLayer->SendRequest(dirty_req);
-            return dirty_res;
+            //return dirty_res;
         }
 
         // clean read miss
         auto next_res = m_nextLayer->SendRequest(req);//try next cache
-        // If this was a read miss, allocate in this cache (Write-Allocate)
-        if (req.type == RequestType::Read || req.type == RequestType::Write) {
-            auto fill_req = CacheToSetRequest(req);
-            fill_req.type = RequestType::DirtyWrite; // or ReadFill, depending on your enums
-            m_sets[sr.index].SendRequest(fill_req);
-        }
         return next_res;
     }
 
