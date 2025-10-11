@@ -11,7 +11,11 @@ namespace CacheSim {
         m_bitWidths.blockOffset = log2(BLOCKSIZE);
         m_bitWidths.index = log2((SIZE/(ASSOC*BLOCKSIZE)));
         m_bitWidths.tag = ADDRESS_SIZE - m_bitWidths.index - m_bitWidths.blockOffset;
-        m_sets.resize((SIZE/(ASSOC*BLOCKSIZE)),{ASSOC,BLOCKSIZE}); //Set(ways) -> Set(ASSOC)
+        m_sets.resize((SIZE/(ASSOC*BLOCKSIZE)),{ASSOC,BLOCKSIZE});
+        m_sets.reserve(SIZE/(ASSOC*BLOCKSIZE));
+        for (int i = 0; i < SIZE/(ASSOC*BLOCKSIZE);i++) {
+            m_sets.emplace_back(ASSOC,BLOCKSIZE);
+        }//Set(ways) -> Set(ASSOC)
     }
 
     Cache::Cache(const std::string& name, CacheType type) : m_name(name), m_type(type), m_results(nullptr){
@@ -20,7 +24,7 @@ namespace CacheSim {
 
 
     CacheResponse Cache::SendRequest(const CacheSim::CacheRequest &req) {
-        if (g_debug_id == 4) {
+        if (g_debug_id == 106797) {
             int x = 0;
         }
 

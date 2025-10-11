@@ -96,17 +96,20 @@ namespace CacheSim {
     };
 
     extern uint64_t g_debug_id;
+    extern uint64_t g_trace_line;
     struct DebugInfo{
-        uint64_t uuid;
+        uint64_t uuid, trace_line;
         CacheResponse cacresp;
         CacheRequest cacreq;
         SetResponse setresp;
         SetRequest setreq;
         std::string name;
 
+
         DebugInfo(CacheResponse cacheResponse, CacheRequest cacheRequest, SetResponse setResponse, SetRequest setRequest, std::string &newName) :
-                cacresp(cacheResponse), cacreq(cacheRequest), setresp(setResponse), setreq(setRequest), name(newName) {
+                 cacresp(cacheResponse), cacreq(cacheRequest), setresp(setResponse), setreq(setRequest), name(newName) {
             uuid = g_debug_id++;
+            trace_line = g_trace_line;
         };
 
     };

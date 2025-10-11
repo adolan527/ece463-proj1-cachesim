@@ -5,7 +5,7 @@
 #include "Manager.h"
 
 namespace CacheSim {
-
+    uint64_t g_trace_line;
     Manager::Manager(size_t layerCount){
         m_layers.resize(4);
         m_layers.clear();
@@ -41,11 +41,12 @@ namespace CacheSim {
 
     void Manager::PrintResults(FILE *file){
 
-        fprintf(file,"ID, Name,Type,Address,Tag,Index,Hit,Dirty_evicted,Dirty_address\n");
+        fprintf(file,"ID, Trace_Line, Name,Type,Address,Tag,Index,Hit,Dirty_evicted,Dirty_address\n");
         for(size_t i = 0; i < m_results.size();i++){
             //if (m_results[i].setreq.index == 0 && m_results[i].name[0] != 'M')
-                fprintf(file,"%u,%s,%s," ADDRESS_FORM_SPEC ",%x,%x,%s,%s,%x\n",
+                fprintf(file,"%u,%u,%s,%s," ADDRESS_FORM_SPEC ",%x,%x,%s,%s,%x\n",
                     m_results[i].uuid,
+                    m_results[i].trace_line,
         m_results[i].name.c_str(),
         m_results[i].cacreq.type == RequestType::Write ? "Write" : m_results[i].cacreq.type == RequestType::DirtyWrite ? "DirtyWrite" : "Read",
         m_results[i].cacreq.address,
@@ -79,11 +80,11 @@ namespace CacheSim {
         fprintf(file,"e. L1 miss rate:               %.4f\n",l1s.missRate());
         fprintf(file,"f. L1 writebacks:              %u\n",l1s.writeback);
         fprintf(file,"g. L1 prefetches:              %u\n",0);
-        fprintf(file,"h. L2 reads (demand):          %u\n",l1s.read_miss + l1s.write_miss);
+        fprintf(file,"h. L2 reads (demand):          %u\n",l2s.read);
         fprintf(file,"i. L2 read misses (demand):    %u\n",l2s.read_miss);
         fprintf(file,"j. L2 reads (prefetch):        %u\n",0);
         fprintf(file,"k. L2 read misses (prefetch):  %u\n",0);
-        fprintf(file,"l. L2 writes:                  %u\n",l1s.writeback);
+        fprintf(file,"l. L2 writes:                  %u\n",l2s.write);
         fprintf(file,"m. L2 write misses:            %u\n",l2s.write_miss);
         fprintf(file,"n. L2 miss rate:               %.4f\n",l2s.missRate());
         fprintf(file,"o. L2 writebacks:              %u\n",l2s.writeback);
@@ -95,7 +96,7 @@ namespace CacheSim {
     void Manager::PrintContents(FILE *file) {
         for(auto &c : m_layers){
             if(c->GetType()!=CacheType::Memory){
-                c->PrintContents(file);
+                c->PrintContents(file);printf("\n");
             }
         }
     }
@@ -104,6 +105,7 @@ namespace CacheSim {
         uint32_t lineCount = 0;
         auto debug_file = fopen("l2_dump","w");
         while(!feof(file) && lineCount < lines){
+            g_trace_line = lineCount;
 
             char mode;
             uint32_t hex;
@@ -118,10 +120,8 @@ namespace CacheSim {
             }
             req.address = hex;
             SendRequest(req);
-            if (lineCount%20 == 0) {
-                if (lineCount == 10700) {
-                    int x = 0;
-                }
+            if (lineCount%100 == 0) {
+
                 fprintf(debug_file,"%d\n",lineCount);
                 (*(++m_layers.begin()))->PrintContents(debug_file);
             }
