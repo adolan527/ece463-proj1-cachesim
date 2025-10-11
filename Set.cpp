@@ -52,7 +52,11 @@ namespace CacheSim {
         m_blocks[index].address = req.address;
         m_blocks[index].tag = req.tag;
         m_blocks[index].valid = true;
-        m_blocks[index].dirty = m_blocks[index].dirty ? m_blocks[index].dirty : req.type == RequestType::Write || req.type == RequestType::DirtyWrite;
+        if (req.type == RequestType::Write || req.type == RequestType::DirtyWrite ) {
+            m_blocks[index].dirty = true;
+        }else {
+            m_blocks[index].dirty = m_blocks[index].dirty;
+        }
         return resp;
     }
 

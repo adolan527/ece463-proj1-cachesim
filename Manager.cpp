@@ -79,11 +79,11 @@ namespace CacheSim {
         fprintf(file,"e. L1 miss rate:               %.4f\n",l1s.missRate());
         fprintf(file,"f. L1 writebacks:              %u\n",l1s.writeback);
         fprintf(file,"g. L1 prefetches:              %u\n",0);
-        fprintf(file,"h. L2 reads (demand):          %u\n",l2s.read);
+        fprintf(file,"h. L2 reads (demand):          %u\n",l1s.read_miss + l1s.write_miss);
         fprintf(file,"i. L2 read misses (demand):    %u\n",l2s.read_miss);
         fprintf(file,"j. L2 reads (prefetch):        %u\n",0);
         fprintf(file,"k. L2 read misses (prefetch):  %u\n",0);
-        fprintf(file,"l. L2 writes:                  %u\n",l2s.write);
+        fprintf(file,"l. L2 writes:                  %u\n",l1s.writeback);
         fprintf(file,"m. L2 write misses:            %u\n",l2s.write_miss);
         fprintf(file,"n. L2 miss rate:               %.4f\n",l2s.missRate());
         fprintf(file,"o. L2 writebacks:              %u\n",l2s.writeback);
@@ -100,8 +100,9 @@ namespace CacheSim {
         }
     }
 
-    void Manager::ReadTrace(FILE *file, uint32_t lines){
+    void Manager::ReadTrace(FILE *file, uint32_t lines){ //default all lines
         uint32_t lineCount = 0;
+        auto debug_file = fopen("l2_dump","w");
         while(!feof(file) && lineCount < lines){
 
             char mode;
@@ -117,8 +118,16 @@ namespace CacheSim {
             }
             req.address = hex;
             SendRequest(req);
+            if (lineCount%20 == 0) {
+                if (lineCount == 10700) {
+                    int x = 0;
+                }
+                fprintf(debug_file,"%d\n",lineCount);
+                (*(++m_layers.begin()))->PrintContents(debug_file);
+            }
             lineCount++;
         }
+        fclose(debug_file);
 
     }
 

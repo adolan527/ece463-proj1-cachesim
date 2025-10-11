@@ -20,7 +20,9 @@ namespace CacheSim {
 
 
     CacheResponse Cache::SendRequest(const CacheSim::CacheRequest &req) {
-
+        if (g_debug_id == 4) {
+            int x = 0;
+        }
 
         if(m_type==CacheType::Memory){
             switch(req.type){
@@ -44,7 +46,7 @@ namespace CacheSim {
 
 
         auto sr = CacheToSetRequest(req);
-        if ((sr.tag == 0x8006b && sr.index == 14) || g_debug_id == 115137) {
+        if ((sr.tag == 0x8006b && sr.index == 24)) {
             int x = 0;
         }
         auto res = m_sets[sr.index].SendRequest(sr);
@@ -77,15 +79,13 @@ namespace CacheSim {
             auto dirty_req = req;
             dirty_req.address = res.dirty_address;
             dirty_req.type = RequestType::DirtyWrite;
-            return m_nextLayer->SendRequest(dirty_req);
+            auto dirty_res = m_nextLayer->SendRequest(dirty_req);
+            return dirty_res;
         }
 
         // clean read miss
-        return m_nextLayer->SendRequest(req);//try next cache
-
-        // clean write miss
-        return res;
-
+        auto next_res = m_nextLayer->SendRequest(req);//try next cache
+        return next_res;
     }
 
     CacheStats Cache::GetStats(){
