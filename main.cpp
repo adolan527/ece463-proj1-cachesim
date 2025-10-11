@@ -82,7 +82,6 @@ if(!debug_mode) {
     printf("trace_file:\t%s\n",args.trace_file);
     printf("\n");
     man.PrintContents();
-    printf("\n");
     man.PrintStatistics();
 
     if (do_csv) {
