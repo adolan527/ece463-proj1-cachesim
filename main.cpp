@@ -15,8 +15,8 @@ struct CLI_Args{
 int main(int argc, char **argv) {
 
 
-    bool debug_mode = false;
-    bool do_csv = true;
+    bool debug_mode = false; //override cli inputs
+    bool do_csv = false; // create csv with extensive debug info
     CLI_Args args;
 
     if(argc!=argCount){
