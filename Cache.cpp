@@ -12,10 +12,7 @@ namespace CacheSim {
         m_bitWidths.index = log2((SIZE/(ASSOC*BLOCKSIZE)));
         m_bitWidths.tag = ADDRESS_SIZE - m_bitWidths.index - m_bitWidths.blockOffset;
         m_sets.resize((SIZE/(ASSOC*BLOCKSIZE)),{ASSOC,BLOCKSIZE});
-        m_sets.reserve(SIZE/(ASSOC*BLOCKSIZE));
-        for (int i = 0; i < SIZE/(ASSOC*BLOCKSIZE);i++) {
-            m_sets.emplace_back(ASSOC,BLOCKSIZE);
-        }//Set(ways) -> Set(ASSOC)
+
     }
 
     Cache::Cache(const std::string& name, CacheType type) : m_name(name), m_type(type), m_results(nullptr){
@@ -24,9 +21,6 @@ namespace CacheSim {
 
 
     CacheResponse Cache::SendRequest(const CacheSim::CacheRequest &req) {
-        if (g_debug_id == 106797) {
-            int x = 0;
-        }
 
         if(m_type==CacheType::Memory){
             switch(req.type){
@@ -50,9 +44,7 @@ namespace CacheSim {
 
 
         auto sr = CacheToSetRequest(req);
-        if ((sr.tag == 0x8006b && sr.index == 24)) {
-            int x = 0;
-        }
+
         auto res = m_sets[sr.index].SendRequest(sr);
 
         // Log result
@@ -89,6 +81,12 @@ namespace CacheSim {
 
         // clean read miss
         auto next_res = m_nextLayer->SendRequest(req);//try next cache
+        // If this was a read miss, allocate in this cache (Write-Allocate)
+        if (req.type == RequestType::Read || req.type == RequestType::Write) {
+            auto fill_req = CacheToSetRequest(req);
+            fill_req.type = RequestType::DirtyWrite; // or ReadFill, depending on your enums
+            m_sets[sr.index].SendRequest(fill_req);
+        }
         return next_res;
     }
 

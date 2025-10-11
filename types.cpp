@@ -4,3 +4,4 @@
 #include "types.h"
 
 uint64_t CacheSim::g_debug_id = 0;
+uint64_t CacheSim::g_trace_line;

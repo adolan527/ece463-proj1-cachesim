@@ -30,8 +30,7 @@ namespace CacheSim {
                     ? i
                     : lru_index;
         }
-        // cleanup required regardless of previous execution
-        done:
+
         if(!resp.hit) { //miss, eviction
             index = lru_index;
             if(m_blocks[index].valid && m_blocks[index].dirty) { //we are evicting a dirty block

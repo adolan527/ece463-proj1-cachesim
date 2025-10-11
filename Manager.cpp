@@ -5,7 +5,6 @@
 #include "Manager.h"
 
 namespace CacheSim {
-    uint64_t g_trace_line;
     Manager::Manager(size_t layerCount){
         m_layers.resize(4);
         m_layers.clear();
