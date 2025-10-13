@@ -81,11 +81,7 @@ namespace CacheSim {
             //return dirty_res;
         }
 
-        // clean read miss
-        if (req.type == RequestType::Write || req.type == RequestType::DirtyWrite) {
-            auto next_res = m_nextLayer->SendRequest(req);//try next cache
-        }
-        return res;
+        return m_nextLayer->SendRequest(req);//try next cache;
     }
 
     CacheStats Cache::GetStats(){
