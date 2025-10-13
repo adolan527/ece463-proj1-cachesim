@@ -21,7 +21,9 @@ namespace CacheSim {
 
 
     CacheResponse Cache::SendRequest(const CacheSim::CacheRequest &req) {
-
+        if (g_debug_id == 128295) {
+            int x = 0;
+        }
         if(m_type==CacheType::Memory){
             switch(req.type){
                 case RequestType::Read:
@@ -80,8 +82,10 @@ namespace CacheSim {
         }
 
         // clean read miss
-        auto next_res = m_nextLayer->SendRequest(req);//try next cache
-        return next_res;
+        if (req.type == RequestType::Write || req.type == RequestType::DirtyWrite) {
+            auto next_res = m_nextLayer->SendRequest(req);//try next cache
+        }
+        return res;
     }
 
     CacheStats Cache::GetStats(){

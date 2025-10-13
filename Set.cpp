@@ -31,7 +31,7 @@ namespace CacheSim {
             }
         }
 
-        for(size_t i = 0; i <m_blocks.size() ;i++){ // check for tag matches
+        for(size_t i = 0; i < m_blocks.size() ;i++){ // check for tag matches
             if(m_blocks[i].valid && m_blocks[i].tag == req.tag){ // if the tag matches
                 resp.hit = true; // hit
                 index = i; // target block
