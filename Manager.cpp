@@ -85,7 +85,7 @@ namespace CacheSim {
         fprintf(file,"k. L2 read misses (prefetch):  %u\n",0);
         fprintf(file,"l. L2 writes:                  %u\n",l2s.write);
         fprintf(file,"m. L2 write misses:            %u\n",l2s.write_miss);
-        fprintf(file,"n. L2 miss rate:               %.4f\n",l2s.missRate());
+        fprintf(file,"n. L2 miss rate:               %.4f\n",l2s.readMissRate());
         fprintf(file,"o. L2 writebacks:              %u\n",l2s.writeback);
         fprintf(file,"p. L2 prefetches:              %u\n",0);
         fprintf(file,"q. memory traffic:             %u\n",mem_traffic);
