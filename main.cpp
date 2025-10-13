@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
 
     bool debug_mode = false; //override cli inputs
-    bool do_csv = true; // create csv with extensive debug info
+    bool do_csv = false; // create csv with extensive debug info
     CLI_Args args;
 
     if(argc!=argCount){

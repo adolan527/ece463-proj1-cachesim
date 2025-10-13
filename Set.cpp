@@ -19,6 +19,7 @@ namespace CacheSim {
         SetResponse resp = {false,false,0};
         int index = 0;
         int lru_index = 0;
+        /*
         for(size_t i = 0; i <m_blocks.size() ;i++) {
             for(size_t j = i+1; j <m_blocks.size() ;j++) {
                 if (i!=j && m_blocks[i].valid && m_blocks[j].valid) {
@@ -30,7 +31,7 @@ namespace CacheSim {
                 }
             }
         }
-
+        */
         for(size_t i = 0; i < m_blocks.size() ;i++){ // check for tag matches
             if(m_blocks[i].valid && m_blocks[i].tag == req.tag){ // if the tag matches
                 resp.hit = true; // hit
