@@ -78,6 +78,8 @@ namespace CacheSim {
             dirty_req.address = res.dirty_address;
             dirty_req.type = RequestType::DirtyWrite;
             auto dirty_res = m_nextLayer->SendRequest(dirty_req);
+            auto write_miss = req; write_miss.type = RequestType::Read;
+            return m_nextLayer->SendRequest(write_miss);
             //return dirty_res;
         }
 
